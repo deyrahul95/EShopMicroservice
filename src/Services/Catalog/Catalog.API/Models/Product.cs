@@ -1,7 +1,10 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace Catalog.API.Models;
 
 public class Product
 {
+    [Key]
     public Guid Id { get; set; }
     public required string Name { get; set; }
     public List<string> Category { get; set; } = [];
