@@ -26,6 +26,7 @@ public class CreateProductEndpoint : ICarterModule
         })
         .WithTags(ProductConstants.PRODUCT_TAG)
         .WithName(ProductConstants.CREATE_PRODUCT_NAME)
+        .Accepts<CreateProductRequest>(ProductConstants.JSON_CONTENT_TYPE)
         .Produces<CreateProductResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary(ProductConstants.CREATE_PRODUCT_DESCRIPTION)
