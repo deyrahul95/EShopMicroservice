@@ -6,9 +6,9 @@ Accept: application/json
 Content-Type: application/json
 
 {
-    "Name": "Samsung Z fold 8",
+    "Name": "Samsung Z fold 8 Ultra",
     "Categories": ["Electronics", "Smartphone", "Samsung"],
     "Description": "Samsung 8th generation folding phone",
     "ImageUrl": "https://img.global.news.samsung.com/global/wp-content/uploads/2026/07/22215435/Samsung-Mobile-Galaxy-Unpacked-July-2026-Galaxy-Z-Fold8-Ultra-Galaxy-Z-Fold8-Galaxy-Z-Flip8-Launch_main1_F.jpg",
-    "Price": 215999.00
+    "Price": 255999.00
 }
