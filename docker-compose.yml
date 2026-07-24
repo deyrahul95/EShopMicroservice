@@ -1,0 +1,23 @@
+services:
+  catalogdb:
+    image: postgres:18.4
+    restart: always
+    container_name: catalogdb
+    shm_size: 128mb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=CatalogDB
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql
+    networks:
+      - EShop-Microservice
+
+volumes:
+  postgres_catalog:
+
+networks:
+  EShop-Microservice:
+    driver: bridge
