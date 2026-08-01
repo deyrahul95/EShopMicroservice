@@ -11,9 +11,11 @@ Common building bocks are kept here like CQRS interfaces.
 
 Catalog API service to handle products.
 
+![Catalog API Screenshot](./docs/CatalogAPI.png)
+
 <strong>```PORT:```</strong>
 
-```text
+```plaintext
 Local Development: 
     http: 5000
     https: 5050
