@@ -1,9 +1,12 @@
 using Carter;
 using Marten;
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container
+builder.Services.AddOpenApi();
+
 builder.Services.AddCarter();
 builder.Services.AddMediatR(config =>
 {
@@ -19,6 +22,12 @@ builder.Services.AddMarten(options =>
 var app = builder.Build();
 
 // Configured the HTTP request pipeline
+if (app.Environment.IsDevelopment())
+{
+    app.MapOpenApi();
+    app.MapScalarApiReference();
+}
+
 app.MapCarter();
 
 app.Run();
