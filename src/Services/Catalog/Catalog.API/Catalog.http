@@ -15,4 +15,8 @@ Content-Type: application/json
 
 ### GET Products
 GET {{BaseAddress}}/products
-Content-Type: application/json
+Accept: application/json
+
+### GET Product by id
+GET {{BaseAddress}}/products/019f93dc-563a-76a7-bdf1-2e26c032d24b
+Accept: application/json

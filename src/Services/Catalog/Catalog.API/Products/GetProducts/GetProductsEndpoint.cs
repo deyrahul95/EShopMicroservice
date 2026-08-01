@@ -11,7 +11,7 @@ public class GetProductsEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet($"{ProductConstants.GET_PRODUCTS_ROUTE}",
+        app.MapGet(ProductConstants.GET_PRODUCTS_ROUTE,
             async (ISender sender, CancellationToken ct) =>
         {
             var query = new GetProductsQuery();

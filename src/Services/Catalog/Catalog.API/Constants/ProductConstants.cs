@@ -15,4 +15,8 @@ public static class ProductConstants
     public const string GET_PRODUCTS_ROUTE = $"{PREFIX}/{PRODUCT_ROUTE}";
     public const string GET_PRODUCTS_NAME = "GetProducts";
     public const string GET_PRODUCTS_DESCRIPTION = "Get Products";
+
+    public const string GET_PRODUCT_BY_ID_ROUTE = $"{PREFIX}/{PRODUCT_ROUTE}";
+    public const string GET_PRODUCT_BY_ID_NAME = "GetProductById";
+    public const string GET_PRODUCT_BY_ID_DESCRIPTION = "Get Product By Id";
 }

@@ -38,7 +38,10 @@ internal class CreateProductCommandHandler(
         await session.SaveChangesAsync(ct);
 
         logger.LogInformation("Product with id {@ProductId} created successfully.", product.Id);
-        logger.LogInformation("Completed create product command handler. Product: {@Product}", JsonSerializer.Serialize(product));
+        logger.LogInformation(
+            "Completed create product command handler. Product: {@Product}",
+            JsonSerializer.Serialize(product));
+
         // Return the result
         return new CreateProductResult(product.Id);
     }
