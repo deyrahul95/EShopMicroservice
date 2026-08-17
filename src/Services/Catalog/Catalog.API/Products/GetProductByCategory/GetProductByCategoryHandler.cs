@@ -17,7 +17,10 @@ internal class GetProductByCategoryQueryHandler(
         logger.LogInformation("Executing get product by category query. Query: {@Query}", query);
 
         var products = await session.Query<Product>()
-            .Where(p => p.Category.Contains(query.Category))
+            .Where(p => p.Category
+                .Any(c => c.Contains(
+                    query.Category,
+                    StringComparison.OrdinalIgnoreCase)))
             .ToListAsync(ct);
 
         logger.LogInformation(
