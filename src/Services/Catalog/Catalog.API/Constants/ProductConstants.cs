@@ -8,6 +8,7 @@ public static class ProductConstants
     public const string PRODUCT_TAG = "Products";
 
     public const string PRODUCT_ROUTE = $"{PREFIX}/products";
+
     public const string CREATE_PRODUCT_NAME = "CreateProduct";
     public const string CREATE_PRODUCT_DESCRIPTION = "Create Product";
 
@@ -20,4 +21,7 @@ public static class ProductConstants
     public const string GET_PRODUCT_BY_CATEGORY_ROUTE = $"{PREFIX}/products/category";
     public const string GET_PRODUCT_BY_CATEGORY_NAME = "GetProductByCategory";
     public const string GET_PRODUCT_BY_CATEGORY_DESCRIPTION = "Get Product By Category";
+
+    public const string DELETE_PRODUCT_NAME = "DeleteProduct";
+    public const string DELETE_PRODUCT_DESCRIPTION = "Delete Product";
 }
