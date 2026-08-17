@@ -16,13 +16,13 @@ public class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(ProductConstants.CREATE_PRODUCT_ROUTE,
+        app.MapPost(ProductConstants.PRODUCT_ROUTE,
             async (CreateProductRequest request, ISender sender, CancellationToken ct) =>
         {
             var command = ToCommand(request);
             var result = await sender.Send(command, ct);
             var response = ToResponse(result);
-            return Results.Created($"{ProductConstants.CREATE_PRODUCT_ROUTE}/{response.Id}", response);
+            return Results.Created($"{ProductConstants.PRODUCT_ROUTE}/{response.Id}", response);
         })
         .WithTags(ProductConstants.PRODUCT_TAG)
         .WithName(ProductConstants.CREATE_PRODUCT_NAME)

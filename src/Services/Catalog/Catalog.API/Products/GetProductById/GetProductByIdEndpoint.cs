@@ -13,7 +13,7 @@ public class GetProductByIdEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet(ProductConstants.GET_PRODUCT_BY_ID_ROUTE + "/{id}", async (
+        app.MapGet(ProductConstants.PRODUCT_ROUTE + "/{id}", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
@@ -31,8 +31,12 @@ public class GetProductByIdEndpoint : ICarterModule
         })
         .WithTags(ProductConstants.PRODUCT_TAG)
         .WithName(ProductConstants.GET_PRODUCT_BY_ID_NAME)
-        .Produces<GetProductByIdResponse>(StatusCodes.Status200OK, ProductConstants.JSON_CONTENT_TYPE)
-        .ProducesProblem(StatusCodes.Status404NotFound, ProductConstants.JSON_CONTENT_TYPE)
+        .Produces<GetProductByIdResponse>(
+            StatusCodes.Status200OK,
+            ProductConstants.JSON_CONTENT_TYPE)
+        .ProducesProblem(
+            StatusCodes.Status404NotFound,
+            ProductConstants.JSON_CONTENT_TYPE)
         .WithDescription(ProductConstants.GET_PRODUCT_BY_ID_DESCRIPTION)
         .WithSummary(ProductConstants.GET_PRODUCT_BY_ID_DESCRIPTION);
     }
