@@ -21,12 +21,12 @@ public class DeleteProductEndpoint : ICarterModule
                 return Results.NoContent();
             }
 
-            return Results.BadRequest();
+            return Results.NotFound();
         })
         .WithTags(ProductConstants.PRODUCT_TAG)
         .WithName(ProductConstants.DELETE_PRODUCT_NAME)
         .Produces(StatusCodes.Status204NoContent)
-        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .ProducesProblem(StatusCodes.Status404NotFound)
         .WithSummary(ProductConstants.DELETE_PRODUCT_DESCRIPTION)
         .WithDescription(ProductConstants.DELETE_PRODUCT_DESCRIPTION);
     }

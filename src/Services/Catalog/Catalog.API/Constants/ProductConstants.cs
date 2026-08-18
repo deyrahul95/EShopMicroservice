@@ -22,6 +22,9 @@ public static class ProductConstants
     public const string GET_PRODUCT_BY_CATEGORY_NAME = "GetProductByCategory";
     public const string GET_PRODUCT_BY_CATEGORY_DESCRIPTION = "Get Product By Category";
 
+    public const string UPDATE_PRODUCT_NAME = "UpdateProduct";
+    public const string UPDATE_PRODUCT_DESCRIPTION = "Update Product";
+
     public const string DELETE_PRODUCT_NAME = "DeleteProduct";
     public const string DELETE_PRODUCT_DESCRIPTION = "Delete Product";
 }

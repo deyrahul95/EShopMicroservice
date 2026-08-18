@@ -16,6 +16,14 @@ internal class DeleteProductCommandHandler(
     {
         logger.LogInformation("Start executing delete product command handler. Command: {@Command}", command);
 
+        var product = await session.LoadAsync<Product>(command.Id, ct);
+
+        if (product is null)
+        {
+            logger.LogInformation("No product found with id :{@Id} in our database.", command.Id);
+            return new DeleteProductResult(Completed: false);
+        }
+
         session.Delete<Product>(command.Id);
         await session.SaveChangesAsync(ct);
 
