@@ -1,5 +1,6 @@
 using Carter;
 using Catalog.API.Constants;
+using Catalog.API.Extensions;
 using Catalog.API.Models;
 using MediatR;
 

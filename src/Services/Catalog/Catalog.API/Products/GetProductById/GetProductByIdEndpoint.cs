@@ -1,9 +1,8 @@
 using Carter;
 using Catalog.API.Constants;
+using Catalog.API.Extensions;
 using Catalog.API.Models;
-using JasperFx.Descriptors;
 using MediatR;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Catalog.API.Products.GetProductById;
 

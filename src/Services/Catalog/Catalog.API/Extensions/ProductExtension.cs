@@ -1,6 +1,6 @@
 using Catalog.API.Models;
 
-namespace Catalog.API.Products;
+namespace Catalog.API.Extensions;
 
 public static class ProductExtension
 {
