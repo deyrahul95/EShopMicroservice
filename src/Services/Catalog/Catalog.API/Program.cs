@@ -5,18 +5,20 @@ using Marten;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+var assembly = typeof(Program).Assembly;
 
 // Add services to the container
 builder.Services.AddOpenApi();
 
-builder.Services.AddCarter();
 builder.Services.AddMediatR(config =>
 {
-    config.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    config.RegisterServicesFromAssembly(assembly);
     config.AddOpenBehavior(typeof(ValidationBehavior<,>));
 });
 
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
+builder.Services.AddValidatorsFromAssembly(assembly);
+
+builder.Services.AddCarter();
 
 builder.Services.AddMarten(options =>
 {

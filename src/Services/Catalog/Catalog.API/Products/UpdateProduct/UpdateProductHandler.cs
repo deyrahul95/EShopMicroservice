@@ -19,6 +19,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
     public UpdateProductCommandValidator()
     {
         RuleFor(x => x.Id)
+            .NotNull()
             .NotEmpty()
             .WithMessage("Id is required");
 
