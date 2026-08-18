@@ -1,6 +1,7 @@
 using System.Text.Json;
 using BuildingBlock.CQRS;
 using Catalog.API.Models;
+using FluentValidation;
 using Marten;
 
 namespace Catalog.API.Products.CreateProduct;
@@ -13,6 +14,42 @@ public record CreateProductCommand(
     decimal Price) : ICommand<CreateProductResult>;
 
 public record CreateProductResult(Guid Id);
+
+public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
+{
+    public CreateProductCommandValidator()
+    {
+        RuleFor(x => x.Name)
+            .NotNull()
+            .NotEmpty()
+            .WithMessage("Name is required");
+
+        RuleFor(x => x.Categories)
+            .NotNull()
+            .NotEmpty()
+            .ForEach(item => item.NotEmpty()
+                .WithMessage("Category values cannot be empty"));
+
+        RuleFor(x => x.Categories)
+            .Must(categories =>
+                categories.Any(c => !string.IsNullOrWhiteSpace(c)))
+            .WithMessage("Category must contain at least one valid, non-empty value");
+
+        RuleFor(x => x.Description)
+            .NotNull()
+            .NotEmpty()
+            .WithMessage("Description is required");
+
+        RuleFor(x => x.ImageUrl)
+            .NotNull()
+            .NotEmpty()
+            .WithMessage("ImageUrl is required");
+
+        RuleFor(x => x.Price)
+            .GreaterThan(0)
+            .WithMessage("Price must be greater than 0");
+    }
+}
 
 internal class CreateProductCommandHandler(
     IDocumentSession session,

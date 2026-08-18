@@ -1,5 +1,6 @@
 using BuildingBlock.CQRS;
 using Catalog.API.Models;
+using FluentValidation;
 using Marten;
 
 namespace Catalog.API.Products.UpdateProduct;
@@ -12,6 +13,39 @@ public record UpdateProductCommand(
     string? ImageUrl = null,
     decimal? Price = null) : ICommand<UpdateProductResult>;
 public record UpdateProductResult(bool Completed);
+
+public class UpdateProductCommandValidator : AbstractValidator<UpdateProductCommand>
+{
+    public UpdateProductCommandValidator()
+    {
+        RuleFor(x => x.Id)
+            .NotEmpty()
+            .WithMessage("Id is required");
+
+        RuleFor(x => x.Name)
+            .Must(name => name == null || !string.IsNullOrWhiteSpace(name))
+            .WithMessage("Name cannot be empty or whitespace-only");
+
+        RuleFor(x => x.Description)
+            .Must(desc => desc == null || !string.IsNullOrWhiteSpace(desc))
+            .WithMessage("Description cannot be empty or whitespace-only");
+
+        RuleFor(x => x.Category)
+            .Must(categories => categories == null ||
+                  (categories.Count > 0 && categories.Any(c => !string.IsNullOrWhiteSpace(c))))
+            .WithMessage("Category must be null or contain at least one valid non-empty value");
+
+        RuleFor(x => x.ImageUrl)
+            .Must(url => url == null || !string.IsNullOrWhiteSpace(url))
+            .WithMessage("ImageUrl cannot be empty or whitespace-only")
+            .Must(url => url == null || Uri.IsWellFormedUriString(url, UriKind.Absolute))
+            .WithMessage("ImageUrl must be a valid URL");
+
+        RuleFor(x => x.Price)
+            .Must(price => price == null || price > 0)
+            .WithMessage("Price must be greater than 0");
+    }
+}
 
 internal class UpdateProductCommandHandler(
     IDocumentSession session,
