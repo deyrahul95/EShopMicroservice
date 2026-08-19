@@ -46,7 +46,7 @@ public class UpdateProductEndpoint : ICarterModule
             Id: id,
             Name: request.Name,
             Description: request.Description,
-            Category: request.Categories,
+            Categories: request.Categories,
             ImageUrl: request.ImageUrl,
             Price: request.Price);
 }

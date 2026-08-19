@@ -10,7 +10,7 @@ public record UpdateProductCommand(
     Guid Id,
     string? Name = null,
     string? Description = null,
-    List<string>? Category = null,
+    List<string>? Categories = null,
     string? ImageUrl = null,
     decimal? Price = null) : ICommand<UpdateProductResult>;
 public record UpdateProductResult(bool Completed);
@@ -32,10 +32,10 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
             .Must(desc => desc == null || !string.IsNullOrWhiteSpace(desc))
             .WithMessage("Description cannot be empty or whitespace-only");
 
-        RuleFor(x => x.Category)
+        RuleFor(x => x.Categories)
             .Must(categories => categories == null ||
                   (categories.Count > 0 && categories.Any(c => !string.IsNullOrWhiteSpace(c))))
-            .WithMessage("Category must be null or contain at least one valid non-empty value");
+            .WithMessage("Categories must be null or contain at least one valid non-empty value");
 
         RuleFor(x => x.ImageUrl)
             .Must(url => url == null || !string.IsNullOrWhiteSpace(url))
@@ -51,7 +51,7 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
             .Must(x => !string.IsNullOrWhiteSpace(x.Name) ||
                !string.IsNullOrWhiteSpace(x.Description) ||
                !string.IsNullOrWhiteSpace(x.ImageUrl) ||
-               x.Category != null ||
+               x.Categories != null ||
                x.Price != null)
             .WithMessage("Request can't be empty. Please specify values want to updated.");
     }
@@ -78,7 +78,7 @@ internal class UpdateProductCommandHandler(
 
         product.Name = string.IsNullOrEmpty(command.Name) ? product.Name : command.Name;
         product.Description = string.IsNullOrEmpty(command.Description) ? product.Description : command.Description;
-        product.Category = command.Category?.Count == 0 ? product.Category : command.Category ?? [];
+        product.Category = command.Categories?.Count == 0 ? product.Category : command.Categories ?? [];
         product.ImageUrl = string.IsNullOrEmpty(command.ImageUrl) ? product.ImageUrl : command.ImageUrl;
         product.Price = command.Price ?? product.Price;
         product.UpdatedAt = DateTime.UtcNow;

@@ -28,12 +28,12 @@ public class CreateProductCommandValidator : AbstractValidator<CreateProductComm
             .NotNull()
             .NotEmpty()
             .ForEach(item => item.NotEmpty()
-                .WithMessage("Category values cannot be empty"));
+                .WithMessage("Categories value cannot be empty"));
 
         RuleFor(x => x.Categories)
             .Must(categories =>
                 categories.Any(c => !string.IsNullOrWhiteSpace(c)))
-            .WithMessage("Category must contain at least one valid, non-empty value");
+            .WithMessage("Categories must contain at least one valid, non-empty value");
 
         RuleFor(x => x.Description)
             .NotNull()
