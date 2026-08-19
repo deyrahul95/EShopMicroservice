@@ -1,4 +1,5 @@
 using BuildingBlock.CQRS;
+using Catalog.API.Exceptions;
 using Catalog.API.Models;
 using FluentValidation;
 using Marten;
@@ -45,6 +46,14 @@ public class UpdateProductCommandValidator : AbstractValidator<UpdateProductComm
         RuleFor(x => x.Price)
             .Must(price => price == null || price > 0)
             .WithMessage("Price must be greater than 0");
+
+        RuleFor(x => x)
+            .Must(x => !string.IsNullOrWhiteSpace(x.Name) ||
+               !string.IsNullOrWhiteSpace(x.Description) ||
+               !string.IsNullOrWhiteSpace(x.ImageUrl) ||
+               x.Category != null ||
+               x.Price != null)
+            .WithMessage("Request can't be empty. Please specify values want to updated.");
     }
 }
 
@@ -64,7 +73,7 @@ internal class UpdateProductCommandHandler(
         if (product is null)
         {
             logger.LogInformation("No product found with id :{@Id} in our database.", command.Id);
-            return new UpdateProductResult(Completed: false);
+            throw new ProductNotFoundException(command.Id);
         }
 
         product.Name = string.IsNullOrEmpty(command.Name) ? product.Name : command.Name;

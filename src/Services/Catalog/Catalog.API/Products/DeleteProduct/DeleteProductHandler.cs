@@ -1,4 +1,5 @@
 using BuildingBlock.CQRS;
+using Catalog.API.Exceptions;
 using Catalog.API.Models;
 using FluentValidation;
 using Marten;
@@ -33,7 +34,7 @@ internal class DeleteProductCommandHandler(
         if (product is null)
         {
             logger.LogInformation("No product found with id :{@Id} in our database.", command.Id);
-            return new DeleteProductResult(Completed: false);
+            throw new ProductNotFoundException(command.Id);
         }
 
         session.Delete<Product>(command.Id);

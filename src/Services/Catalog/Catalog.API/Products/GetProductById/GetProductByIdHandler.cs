@@ -1,5 +1,6 @@
 using System.Text.Json;
 using BuildingBlock.CQRS;
+using Catalog.API.Exceptions;
 using Catalog.API.Models;
 using Marten;
 
@@ -22,7 +23,7 @@ internal class GetProductByIdQueryHandler(
         if (product is null)
         {
             logger.LogInformation("No product found with id :{@Id} in our database.", query.Id);
-            return new GetProductByIdResult();
+            throw new ProductNotFoundException(query.Id);
         }
 
         logger.LogInformation("Product with id: {@Id} found successfully.", product?.Id);

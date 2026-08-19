@@ -15,21 +15,12 @@ public class UpdateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPut(ProductConstants.PRODUCT_ROUTE + "/{id}", async (
+        app.MapPatch(ProductConstants.PRODUCT_ROUTE + "/{id}", async (
             Guid id,
             UpdateProductRequest request,
             ISender sender,
             CancellationToken ct) =>
         {
-            if (string.IsNullOrEmpty(request.Name)
-            && string.IsNullOrEmpty(request.Description)
-            && string.IsNullOrEmpty(request.ImageUrl)
-            && request.Categories == null
-            && request.Price == null)
-            {
-                return Results.BadRequest();
-            }
-
             var command = ToCommand(request: request, id: id);
             var result = await sender.Send(request: command, cancellationToken: ct);
 
