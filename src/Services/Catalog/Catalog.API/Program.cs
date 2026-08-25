@@ -3,15 +3,18 @@ using BuildingBlock.Exceptions.Handler;
 using Carter;
 using Catalog.API.Data;
 using FluentValidation;
+using HealthChecks.UI.Client;
 using Marten;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var assembly = typeof(Program).Assembly;
+var dbConnectionString = builder.Configuration.GetConnectionString("Database")
+    ?? throw new Exception("Database connection string can't be null!");
 
 // Add services to the container
 builder.Services.AddOpenApi();
-
 builder.Services.AddMediatR(config =>
 {
     config.RegisterServicesFromAssembly(assembly);
@@ -20,14 +23,10 @@ builder.Services.AddMediatR(config =>
 });
 
 builder.Services.AddValidatorsFromAssembly(assembly);
-
 builder.Services.AddCarter();
-
 builder.Services.AddMarten(options =>
 {
-    var connectionString = builder.Configuration.GetConnectionString("Database")
-        ?? throw new Exception("Database connection string can't be null!");
-    options.Connection(connectionString);
+    options.Connection(dbConnectionString);
 }).UseLightweightSessions();
 
 if (builder.Environment.IsDevelopment())
@@ -36,6 +35,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddHealthChecks().AddNpgSql(dbConnectionString);
 
 var app = builder.Build();
 
@@ -49,5 +49,10 @@ if (app.Environment.IsDevelopment())
 app.MapCarter();
 
 app.UseExceptionHandler(option => { });
+
+app.UseHealthChecks("/health", new HealthCheckOptions
+{
+    ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+});
 
 app.Run();
