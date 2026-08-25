@@ -16,21 +16,21 @@ public class CreateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPost(ProductConstants.PRODUCT_ROUTE,
+        app.MapPost(ProductRouteConstant.PRODUCT_ROUTE,
             async (CreateProductRequest request, ISender sender, CancellationToken ct) =>
         {
             var command = ToCommand(request);
             var result = await sender.Send(command, ct);
             var response = ToResponse(result);
-            return Results.Created($"{ProductConstants.PRODUCT_ROUTE}/{response.Id}", response);
+            return Results.Created($"{ProductRouteConstant.PRODUCT_ROUTE}/{response.Id}", response);
         })
-        .WithTags(ProductConstants.PRODUCT_TAG)
-        .WithName(ProductConstants.CREATE_PRODUCT_NAME)
-        .Accepts<CreateProductRequest>(ProductConstants.JSON_CONTENT_TYPE)
+        .WithTags(ProductRouteConstant.PRODUCT_TAG)
+        .WithName(ProductRouteConstant.CREATE_PRODUCT_NAME)
+        .Accepts<CreateProductRequest>(ProductRouteConstant.JSON_CONTENT_TYPE)
         .Produces<CreateProductResponse>(StatusCodes.Status201Created)
         .ProducesProblem(StatusCodes.Status400BadRequest)
-        .WithSummary(ProductConstants.CREATE_PRODUCT_DESCRIPTION)
-        .WithDescription(ProductConstants.CREATE_PRODUCT_DESCRIPTION);
+        .WithSummary(ProductRouteConstant.CREATE_PRODUCT_DESCRIPTION)
+        .WithDescription(ProductRouteConstant.CREATE_PRODUCT_DESCRIPTION);
     }
 
     private static CreateProductCommand ToCommand(CreateProductRequest request)

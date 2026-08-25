@@ -8,7 +8,7 @@ public class DeleteProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapDelete(ProductConstants.PRODUCT_ROUTE + "/{id}", async (
+        app.MapDelete(ProductRouteConstant.PRODUCT_ROUTE + "/{id}", async (
             Guid id,
             ISender sender,
             CancellationToken ct) =>
@@ -23,11 +23,11 @@ public class DeleteProductEndpoint : ICarterModule
 
             return Results.NotFound();
         })
-        .WithTags(ProductConstants.PRODUCT_TAG)
-        .WithName(ProductConstants.DELETE_PRODUCT_NAME)
+        .WithTags(ProductRouteConstant.PRODUCT_TAG)
+        .WithName(ProductRouteConstant.DELETE_PRODUCT_NAME)
         .Produces(StatusCodes.Status204NoContent)
         .ProducesProblem(StatusCodes.Status404NotFound)
-        .WithSummary(ProductConstants.DELETE_PRODUCT_DESCRIPTION)
-        .WithDescription(ProductConstants.DELETE_PRODUCT_DESCRIPTION);
+        .WithSummary(ProductRouteConstant.DELETE_PRODUCT_DESCRIPTION)
+        .WithDescription(ProductRouteConstant.DELETE_PRODUCT_DESCRIPTION);
     }
 }

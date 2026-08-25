@@ -12,7 +12,7 @@ public class GetProductByCategoryEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet(ProductConstants.GET_PRODUCT_BY_CATEGORY_ROUTE + "/{category}", async (
+        app.MapGet(ProductRouteConstant.GET_PRODUCT_BY_CATEGORY_ROUTE + "/{category}", async (
             string category,
             ISender sender,
             CancellationToken ct) =>
@@ -22,13 +22,13 @@ public class GetProductByCategoryEndpoint : ICarterModule
             var response = ToResponse(result);
             return Results.Ok(response);
         })
-        .WithTags(ProductConstants.PRODUCT_TAG)
-        .WithName(ProductConstants.GET_PRODUCT_BY_CATEGORY_NAME)
+        .WithTags(ProductRouteConstant.PRODUCT_TAG)
+        .WithName(ProductRouteConstant.GET_PRODUCT_BY_CATEGORY_NAME)
         .Produces<GetProductByCategoryResponse>(
             StatusCodes.Status200OK,
-            ProductConstants.JSON_CONTENT_TYPE)
-        .WithDescription(ProductConstants.GET_PRODUCT_BY_CATEGORY_DESCRIPTION)
-        .WithSummary(ProductConstants.GET_PRODUCT_BY_CATEGORY_DESCRIPTION);
+            ProductRouteConstant.JSON_CONTENT_TYPE)
+        .WithDescription(ProductRouteConstant.GET_PRODUCT_BY_CATEGORY_DESCRIPTION)
+        .WithSummary(ProductRouteConstant.GET_PRODUCT_BY_CATEGORY_DESCRIPTION);
     }
 
     private static GetProductByCategoryResponse ToResponse(GetProductByCategoryResult result)

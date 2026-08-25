@@ -15,7 +15,7 @@ public class UpdateProductEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapPatch(ProductConstants.PRODUCT_ROUTE + "/{id}", async (
+        app.MapPatch(ProductRouteConstant.PRODUCT_ROUTE + "/{id}", async (
             Guid id,
             UpdateProductRequest request,
             ISender sender,
@@ -31,14 +31,14 @@ public class UpdateProductEndpoint : ICarterModule
 
             return Results.NotFound();
         })
-        .WithTags(ProductConstants.PRODUCT_TAG)
-        .WithName(ProductConstants.UPDATE_PRODUCT_NAME)
-        .Accepts<UpdateProductRequest>(ProductConstants.JSON_CONTENT_TYPE)
+        .WithTags(ProductRouteConstant.PRODUCT_TAG)
+        .WithName(ProductRouteConstant.UPDATE_PRODUCT_NAME)
+        .Accepts<UpdateProductRequest>(ProductRouteConstant.JSON_CONTENT_TYPE)
         .Produces(StatusCodes.Status204NoContent)
         .ProducesProblem(StatusCodes.Status404NotFound)
         .ProducesProblem(StatusCodes.Status400BadRequest)
-        .WithSummary(ProductConstants.UPDATE_PRODUCT_DESCRIPTION)
-        .WithDescription(ProductConstants.UPDATE_PRODUCT_DESCRIPTION);
+        .WithSummary(ProductRouteConstant.UPDATE_PRODUCT_DESCRIPTION)
+        .WithDescription(ProductRouteConstant.UPDATE_PRODUCT_DESCRIPTION);
     }
 
     private static UpdateProductCommand ToCommand(UpdateProductRequest request, Guid id) =>

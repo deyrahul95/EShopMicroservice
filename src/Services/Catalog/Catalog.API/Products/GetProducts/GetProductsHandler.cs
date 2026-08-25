@@ -1,12 +1,13 @@
 using BuildingBlock.CQRS;
 using Catalog.API.Models;
 using Marten;
+using Marten.Pagination;
 
 namespace Catalog.API.Products.GetProducts;
 
-public record GetProductsQuery() : IQuery<GetProductsResult>;
+public record GetProductsQuery(int PageNumber, int PageSize) : IQuery<GetProductsResult>;
 
-public record GetProductsResult(IEnumerable<Product> Products);
+public record GetProductsResult(IPagedList<Product> Products);
 
 internal class GetProductsQueryHandler(
     IDocumentSession session,
@@ -18,7 +19,8 @@ internal class GetProductsQueryHandler(
         logger.LogInformation("Start executing get products query handler. Query: {@Query}", query);
 
         // Retrieve products from the database
-        var products = await session.Query<Product>().ToListAsync(ct);
+        var products = await session.Query<Product>()
+            .ToPagedListAsync(pageNumber: query.PageNumber, pageSize: query.PageSize, token: ct);
         logger.LogInformation("{@Count} products retrieved from the database.", products.Count);
 
         logger.LogInformation("Completed get products query handler. Count: {@Count}", products.Count);

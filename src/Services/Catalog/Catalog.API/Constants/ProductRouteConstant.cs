@@ -1,6 +1,6 @@
 namespace Catalog.API.Constants;
 
-public static class ProductConstants
+public static class ProductRouteConstant
 {
     private const string PREFIX = "/api";
 
