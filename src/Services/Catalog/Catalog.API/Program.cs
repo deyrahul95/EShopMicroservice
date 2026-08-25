@@ -1,6 +1,7 @@
 using BuildingBlock.Behaviors;
 using BuildingBlock.Exceptions.Handler;
 using Carter;
+using Catalog.API.Data;
 using FluentValidation;
 using Marten;
 using Scalar.AspNetCore;
@@ -28,6 +29,11 @@ builder.Services.AddMarten(options =>
         ?? throw new Exception("Database connection string can't be null!");
     options.Connection(connectionString);
 }).UseLightweightSessions();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.InitializeMartenWith<CatalogInitialData>();
+}
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
