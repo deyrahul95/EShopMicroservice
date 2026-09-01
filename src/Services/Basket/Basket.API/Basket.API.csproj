@@ -8,6 +8,14 @@
 
   <ItemGroup>
     <ProjectReference Include="../../../BuildingBlocks/BuildingBlock/BuildingBlock.csproj" />
+    <ProjectReference Include="../Basket.Core/Basket.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Carter" Version="10.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.10" />
+    <PackageReference Include="Microsoft.OpenApi" Version="2.7.5" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.2" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,4 @@
-namespace Basket.API.Models;
+namespace Basket.Core.Domains;
 
 public class ShoppingCartItem
 {

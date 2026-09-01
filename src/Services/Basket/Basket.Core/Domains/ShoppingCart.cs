@@ -1,9 +1,10 @@
-namespace Basket.API.Models;
+namespace Basket.Core.Domains;
 
 public class ShoppingCart
 {
     public string UserName { get; set; } = string.Empty;
     public List<ShoppingCartItem> Items { get; set; } = [];
+    public DateTime LastModified { get; set; } = DateTime.UtcNow;
     public decimal TotalPrice => Items.Sum(x => x.Price * x.Quantity);
 
     public ShoppingCart(string userName)

@@ -8,5 +8,6 @@
   </Folder>
   <Folder Name="/Services/Basket/">
     <Project Path="Services/Basket/Basket.API/Basket.API.csproj" />
+    <Project Path="Services/Basket/Basket.Core/Basket.Core.csproj" />
   </Folder>
 </Solution>
