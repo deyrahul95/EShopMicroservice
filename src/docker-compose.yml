@@ -1,0 +1,40 @@
+services:
+  catalogdb:
+    image: postgres:18.4
+    container_name: catalogdb
+    shm_size: 128mb
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=example
+      - POSTGRES_DB=CatalogDB
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_catalog:/var/lib/postgresql
+    networks:
+      - EShop-Microservice
+
+  catalog.api:
+    image: catalog-api
+    build:
+      context: .
+      dockerfile: ./Services/Catalog/Catalog.API/Dockerfile
+    container_name: catalog-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8000
+      - ConnectionStrings__Database=Server=catalogdb;Port=5432;Database=CatalogDB;User Id=postgres;Password=example
+    depends_on:
+      - catalogdb
+    ports:
+      - "6001:8000"
+    networks:
+      - EShop-Microservice
+
+volumes:
+  postgres_catalog:
+
+networks:
+  EShop-Microservice:
+    driver: bridge
