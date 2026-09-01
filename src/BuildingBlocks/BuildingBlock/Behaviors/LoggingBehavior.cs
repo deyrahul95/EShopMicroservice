@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -22,7 +23,7 @@ public class LoggingBehavior<TRequest, TResponse>
             "[START] Handle Request: {Request} - Response: {Response} - Request Data: {@RequestData}",
             requestTypeName,
             responseTypeName,
-            request);
+            JsonSerializer.Serialize(request));
 
         var timer = new Stopwatch();
         timer.Start();

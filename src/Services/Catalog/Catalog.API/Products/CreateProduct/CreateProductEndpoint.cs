@@ -27,8 +27,8 @@ public class CreateProductEndpoint : ICarterModule
         .WithTags(ProductRouteConstant.PRODUCT_TAG)
         .WithName(ProductRouteConstant.CREATE_PRODUCT_NAME)
         .Accepts<CreateProductRequest>(ProductRouteConstant.JSON_CONTENT_TYPE)
-        .Produces<CreateProductResponse>(StatusCodes.Status201Created)
-        .ProducesProblem(StatusCodes.Status400BadRequest)
+        .Produces<CreateProductResponse>(StatusCodes.Status201Created, ProductRouteConstant.JSON_CONTENT_TYPE)
+        .ProducesProblem(StatusCodes.Status400BadRequest, ProductRouteConstant.JSON_CONTENT_TYPE)
         .WithSummary(ProductRouteConstant.CREATE_PRODUCT_DESCRIPTION)
         .WithDescription(ProductRouteConstant.CREATE_PRODUCT_DESCRIPTION);
     }

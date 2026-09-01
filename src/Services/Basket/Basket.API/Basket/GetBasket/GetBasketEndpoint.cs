@@ -25,7 +25,6 @@ public class GetBasketEndpoint : ICarterModule
             .WithTags(BasketRouteConstant.BASKET_TAG)
             .WithName(BasketRouteConstant.GET_BASKETS_NAME)
             .Produces<GetBasketResponse>(StatusCodes.Status200OK, BasketRouteConstant.JSON_CONTENT_TYPE)
-            .ProducesProblem(StatusCodes.Status500InternalServerError, BasketRouteConstant.JSON_CONTENT_TYPE)
             .WithDescription(BasketRouteConstant.GET_BASKETS_DESCRIPTION)
             .WithSummary(BasketRouteConstant.GET_BASKETS_DESCRIPTION);
     }

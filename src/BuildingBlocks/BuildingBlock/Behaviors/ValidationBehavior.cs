@@ -20,7 +20,7 @@ public class ValidationBehavior<TRequest, TResponse>(
         logger.LogInformation(
             "Executing request validation for {RequestType}. {@Request}",
             typeof(TRequest).Name,
-            request);
+            JsonSerializer.Serialize(request));
 
         if (!validators.Any())
         {

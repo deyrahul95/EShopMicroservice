@@ -12,4 +12,7 @@ public static class BasketRouteConstant
 
     public const string GET_BASKETS_NAME = "GetBaskets";
     public const string GET_BASKETS_DESCRIPTION = "Get Baskets";
+
+    public const string STORE_BASKET_NAME = "StoreBasket";
+    public const string STORE_BASKET_DESCRIPTION = "Store Basket";
 }
