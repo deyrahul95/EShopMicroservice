@@ -7,36 +7,37 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Basket.API.Basket.StoreBasket;
 
-public record StoreBasketRequest(List<ShoppingCartItemDto> Items);
+public record StoreBasketRequest(string UserName, List<ShoppingCartItemDto> Items);
+public record StoreBasketResponse(string UserName);
 
 public class StoreBasketEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost(
-            BasketRouteConstant.BASKET_ROUTE_V1 + "/{username}",
+            BasketRouteConstant.BASKET_ROUTE_V1,
             async (
-                [FromRoute] string userName,
                 [FromBody] StoreBasketRequest request,
                 ISender sender,
                 CancellationToken ct) =>
             {
-                var command = ToCommand(userName: userName, request: request);
+                var command = ToCommand(request: request);
                 var result = await sender.Send(command, ct);
-                return Results.NoContent();
+                var response = new StoreBasketResponse(UserName: result.UserName);
+                return Results.Created($"{BasketRouteConstant.BASKET_ROUTE_V1}/{response.UserName}", response);
             })
         .WithTags(BasketRouteConstant.BASKET_TAG)
         .WithName(BasketRouteConstant.STORE_BASKET_NAME)
         .Accepts<StoreBasketRequest>(BasketRouteConstant.JSON_CONTENT_TYPE)
-        .Produces(StatusCodes.Status204NoContent)
+        .Produces<StoreBasketResponse>(StatusCodes.Status201Created, BasketRouteConstant.JSON_CONTENT_TYPE)
         .ProducesProblem(StatusCodes.Status400BadRequest, BasketRouteConstant.JSON_CONTENT_TYPE)
         .WithDescription(BasketRouteConstant.STORE_BASKET_DESCRIPTION)
         .WithSummary(BasketRouteConstant.STORE_BASKET_DESCRIPTION);
     }
 
-    private static StoreBasketCommand ToCommand(string userName, StoreBasketRequest request)
+    private static StoreBasketCommand ToCommand(StoreBasketRequest request)
         => new(
-            UserName: userName,
+            UserName: request.UserName,
             CartItems: [.. request.Items.Select(
                 x => new ShoppingCartItem(){
                     ProductId = x.ProductId,
