@@ -15,4 +15,7 @@ public static class BasketRouteConstant
 
     public const string STORE_BASKET_NAME = "StoreBasket";
     public const string STORE_BASKET_DESCRIPTION = "Store Basket";
+
+    public const string DELETE_BASKET_NAME = "DeleteBasket";
+    public const string DELETE_BASKET_DESCRIPTION = "Delete Basket";
 }
