@@ -1,7 +1,10 @@
+using Basket.Core.Domains;
+using Basket.Core.Repositories;
 using BuildingBlock.Behaviors;
 using BuildingBlock.Exceptions.Handler;
 using Carter;
 using FluentValidation;
+using Marten;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +22,16 @@ builder.Services.AddMediatR(config =>
 
 builder.Services.AddValidatorsFromAssembly(assembly);
 builder.Services.AddCarter();
+
+builder.Services.AddMarten(options =>
+{
+    var databaseConnection = builder.Configuration.GetConnectionString("Database")
+        ?? throw new Exception("Database connection string can't be empty.");
+    options.Connection(databaseConnection);
+    options.Schema.For<ShoppingCart>().Identity(x => x.UserName);
+}).UseLightweightSessions();
+
+builder.Services.AddSingleton<IBasketRepository, BasketRepository>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 

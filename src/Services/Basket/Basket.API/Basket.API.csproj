@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../../BuildingBlocks/BuildingBlock/BuildingBlock.csproj" />
     <ProjectReference Include="../Basket.Core/Basket.Core.csproj" />
   </ItemGroup>
 
