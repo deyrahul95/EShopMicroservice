@@ -1,3 +1,4 @@
+using Basket.Core.Repositories;
 using BuildingBlock.CQRS;
 using FluentValidation;
 
@@ -17,16 +18,20 @@ public class DeleteBasketCommandValidator : AbstractValidator<DeleteBasketComman
     }
 }
 
-public class DeleteBasketCommandHandler(ILogger<DeleteBasketCommandHandler> logger)
+public class DeleteBasketCommandHandler(IBasketRepository repository, ILogger<DeleteBasketCommandHandler> logger)
     : ICommandHandler<DeleteBasketCommand, DeleteBasketResult>
 {
     public async Task<DeleteBasketResult> Handle(DeleteBasketCommand command, CancellationToken ct)
     {
-        logger.LogInformation("Executing delete basket command. @{Command}", command);
-        await Task.Delay(20, ct);
+        logger.LogInformation("Executing delete basket command. {@Command}", command);
 
-        // TODO: Delete the basket from the database and cache
-        logger.LogInformation("Basket delete successfully. UserName: {@UserName}", command.UserName);
+        var isDeleted = await repository.DeleteBasket(command.UserName, ct);
+
+        logger.LogInformation(
+            "Basket deleted successfully. UserName: {@UserName}, IsDeleted: {@IsDeleted}",
+            command.UserName,
+            isDeleted);
+
         logger.LogInformation("Delete basket command executed successfully.");
         return new DeleteBasketResult(IsSuccess: true);
     }

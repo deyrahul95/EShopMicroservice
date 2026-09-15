@@ -1,5 +1,6 @@
 using System.Text.Json;
 using Basket.Core.Domains;
+using Basket.Core.Repositories;
 using BuildingBlock.CQRS;
 using FluentValidation;
 
@@ -62,7 +63,7 @@ public class ShoppingCartItemValidator : AbstractValidator<ShoppingCartItem>
     }
 }
 
-public class StoreBasketCommandHandler(ILogger<StoreBasketCommandHandler> logger)
+public class StoreBasketCommandHandler(IBasketRepository repository, ILogger<StoreBasketCommandHandler> logger)
     : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken ct)
@@ -70,7 +71,6 @@ public class StoreBasketCommandHandler(ILogger<StoreBasketCommandHandler> logger
         logger.LogInformation(
             "Executing store basket command: {@Command}",
             JsonSerializer.Serialize(command));
-        await Task.Delay(10, ct);
 
         var cart = new ShoppingCart(command.UserName)
         {
@@ -78,11 +78,11 @@ public class StoreBasketCommandHandler(ILogger<StoreBasketCommandHandler> logger
             LastModified = DateTime.UtcNow
         };
 
+        cart = await repository.StoreBasket(cart, ct);
         logger.LogInformation(
             "Cart store successfully: {@Cart}",
             JsonSerializer.Serialize(cart));
 
-        // TODO: store basket in database
         var result = new StoreBasketResult(cart.UserName);
 
         logger.LogInformation(

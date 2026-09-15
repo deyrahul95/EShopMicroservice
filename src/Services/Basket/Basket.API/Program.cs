@@ -31,7 +31,7 @@ builder.Services.AddMarten(options =>
     options.Schema.For<ShoppingCart>().Identity(x => x.UserName);
 }).UseLightweightSessions();
 
-builder.Services.AddSingleton<IBasketRepository, BasketRepository>();
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
