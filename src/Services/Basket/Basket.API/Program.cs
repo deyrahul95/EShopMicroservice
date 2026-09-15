@@ -4,12 +4,18 @@ using BuildingBlock.Behaviors;
 using BuildingBlock.Exceptions.Handler;
 using Carter;
 using FluentValidation;
+using HealthChecks.UI.Client;
 using Marten;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var assembly = typeof(Program).Assembly;
+var databaseConnection = builder.Configuration.GetConnectionString("Database")
+    ?? throw new Exception("Database connection string can't be empty.");
+var redisConnection = builder.Configuration.GetConnectionString("Redis")
+    ?? throw new Exception("Redis connection string can't be empty.");
 
 // Add services to the container
 builder.Services.AddOpenApi();
@@ -25,21 +31,22 @@ builder.Services.AddCarter();
 
 builder.Services.AddMarten(options =>
 {
-    var databaseConnection = builder.Configuration.GetConnectionString("Database")
-        ?? throw new Exception("Database connection string can't be empty.");
     options.Connection(databaseConnection);
     options.Schema.For<ShoppingCart>().Identity(x => x.UserName);
 }).UseLightweightSessions();
 
 builder.Services.AddStackExchangeRedisCache(options =>
 {
-    options.Configuration = builder.Configuration.GetConnectionString("Redis");
+    options.Configuration = redisConnection;
 });
 
 builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 builder.Services.Decorate<IBasketRepository, CachedBasketRepository>();
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
+builder.Services.AddHealthChecks()
+    .AddNpgSql(databaseConnection)
+    .AddRedis(redisConnection);
 
 var app = builder.Build();
 
@@ -53,5 +60,10 @@ if (app.Environment.IsDevelopment())
 app.MapCarter();
 
 app.UseExceptionHandler(option => { });
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.Run();
