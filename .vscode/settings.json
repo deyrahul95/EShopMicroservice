@@ -3,9 +3,11 @@
         "ASPNETCORE",
         "basketdb",
         "catalogdb",
+        "distributedcached",
         "Mediat",
         "postgres",
         "postgresql",
-        "rahul"
+        "rahul",
+        "redis"
     ]
 }

@@ -15,6 +15,15 @@ services:
     networks:
       - EShop-Microservice
 
+  distributedcached:
+    image: redis
+    container_name: distributedcached
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - EShop-Microservice
+
   # basket.api:
   #   image: basket-api
   #   build:
