@@ -10,4 +10,7 @@
     <Project Path="Services/Basket/Basket.API/Basket.API.csproj" />
     <Project Path="Services/Basket/Basket.Core/Basket.Core.csproj" />
   </Folder>
+  <Folder Name="/Services/Discount/">
+    <Project Path="Services/Discount/Discount.Grpc/Discount.Grpc.csproj" />
+  </Folder>
 </Solution>

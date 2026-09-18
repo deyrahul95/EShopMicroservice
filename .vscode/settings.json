@@ -9,5 +9,6 @@
         "postgresql",
         "rahul",
         "redis"
-    ]
+    ],
+    "dotnet.defaultSolution": "src/eshop-microservice.slnx"
 }
