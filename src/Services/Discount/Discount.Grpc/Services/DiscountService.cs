@@ -19,8 +19,8 @@ public class DiscountService(
 
     public override async Task<CouponModel> GetDiscount(GetDiscountRequest request, ServerCallContext context)
     {
-        logger.LogInformation("Executing get discount for request {@Request}", request);
-        logger.LogInformation($"Fetching coupon for product name {request.ProductName} from database");
+        logger.LogInformation("Executing get discount request {@Request}", request);
+        logger.LogInformation($"Fetching discount for product name {request.ProductName} from database");
         var coupon = await dbContext.Coupons
             .AsNoTracking()
             .FirstOrDefaultAsync(c => c.ProductName.ToLower()
@@ -28,20 +28,35 @@ public class DiscountService(
 
         if (coupon is null)
         {
-            logger.LogInformation($"No coupon found for product name {request.ProductName} in database");
-            logger.LogInformation("Executed get discount with response {@Response}", NoDiscountModel);
+            logger.LogInformation($"No discount found for product name {request.ProductName} in database");
+            logger.LogInformation("Executed get discount. Response {@Response}", NoDiscountModel);
             return NoDiscountModel;
         }
 
-        logger.LogInformation($"Coupon found successfully for product name {coupon.ProductName}");
+        logger.LogInformation($"Discount found successfully for product name {coupon.ProductName}");
         var response = coupon.ToModel();
-        logger.LogInformation("Executed get discount with response {@Response}", response);
+        logger.LogInformation("Executed get discount. Response {@Response}", response);
         return response;
     }
 
-    public override Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
+    public override async Task<CouponModel> CreateDiscount(CreateDiscountRequest request, ServerCallContext context)
     {
-        return base.CreateDiscount(request, context);
+        logger.LogInformation("Executing create discount request {@Request}", request);
+
+        var coupon = new Coupon
+        {
+            ProductName = request.ProductName,
+            Description = request.Description,
+            Amount = request.Amount
+        };
+
+        dbContext.Coupons.Add(coupon);
+        await dbContext.SaveChangesAsync();
+        logger.LogInformation($"Discount added successfully. Product name {coupon.ProductName}");
+
+        var response = coupon.ToModel();
+        logger.LogInformation("Executed create discount. Response {@Response}", response);
+        return response;
     }
 
     public override Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
