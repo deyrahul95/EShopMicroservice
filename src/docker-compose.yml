@@ -70,6 +70,21 @@ services:
     networks:
       - EShop-Microservice
 
+  discount.grpc:
+    image: discount-grpc
+    build:
+      context: .
+      dockerfile: ./Services/Discount/Discount.Grpc/Dockerfile
+    container_name: discount-grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8000
+      - ConnectionStrings__Database=Data Source=discount.db
+    ports:
+      - "6003:8000"
+    networks:
+      - EShop-Microservice
+
 volumes:
   postgres_catalog:
   postgres_basket:

@@ -1,46 +1,18 @@
 services:
-  basketdb:
-    image: postgres:18.4
-    container_name: basketdb
-    shm_size: 128mb
-    environment:
-      - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=example
-      - POSTGRES_DB=BasketDB
-    restart: always
-    volumes:
-      - postgres_basket:/var/lib/postgresql
-    networks:
-      - EShop-Microservice
-
-  distributedcached:
-    image: redis
-    container_name: distributedcached
-    restart: always
-    networks:
-      - EShop-Microservice
-
-  basket.api:
-    image: basket-api
+  discount.grpc:
+    image: discount-grpc
     build:
       context: .
-      dockerfile: ./Services/Basket/Basket.API/Dockerfile
-    container_name: basket-api
+      dockerfile: ./Services/Discount/Discount.Grpc/Dockerfile
+    container_name: discount-grpc
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ASPNETCORE_HTTP_PORTS=8000
-      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDB;User Id=postgres;Password=example
-      - ConnectionStrings__Redis=distributedcached:6379
-    depends_on:
-      - basketdb
-      - distributedcached
+      - ConnectionStrings__Database=Data Source=discount.db
     ports:
-      - "6002:8000"
+      - "6003:8000"
     networks:
       - EShop-Microservice
-
-volumes:
-  postgres_basket:
 
 networks:
   EShop-Microservice:
