@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Discount.Grpc.Data;
 using Discount.Grpc.Models;
 using Grpc.Core;
@@ -59,13 +60,53 @@ public class DiscountService(
         return response;
     }
 
-    public override Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
+    public override async Task<CouponModel> UpdateDiscount(UpdateDiscountRequest request, ServerCallContext context)
     {
-        return base.UpdateDiscount(request, context);
+        logger.LogInformation("Executing update discount request {@Request}", request);
+
+        var coupon = new Coupon
+        {
+            Id = request.Id,
+            ProductName = request.ProductName,
+            Description = request.Description,
+            Amount = request.Amount
+        };
+
+        dbContext.Coupons.Update(coupon);
+        await dbContext.SaveChangesAsync();
+        logger.LogInformation($"Discount updated successfully. Product name {coupon.ProductName}");
+
+        var response = coupon.ToModel();
+        logger.LogInformation("Executed update discount. Response {@Response}", response);
+        return response;
     }
 
-    public override Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
+    public override async Task<DeleteDiscountResponse> DeleteDiscount(DeleteDiscountRequest request, ServerCallContext context)
     {
-        return base.DeleteDiscount(request, context);
+        logger.LogInformation("Executing delete discount request {@Request}", request);
+        logger.LogInformation($"Fetching discount for product name {request.ProductName} from database");
+        var coupon = await dbContext.Coupons
+            .AsNoTracking()
+            .FirstOrDefaultAsync(c => c.ProductName.ToLower()
+                .Equals(request.ProductName.ToLower()));
+
+        if (coupon is null)
+        {
+            logger.LogInformation($"No discount found for product name {request.ProductName} in database");
+            throw new RpcException(new Status(
+                StatusCode.NotFound,
+                $"Discount with product name {request.ProductName} is not found in database."));
+        }
+
+        dbContext.Remove(coupon);
+        await dbContext.SaveChangesAsync();
+        logger.LogInformation(
+            "Discount deleted successfully. Product name: {@ProductName}, Coupon: {@Coupon}",
+            coupon.ProductName,
+            JsonSerializer.Serialize(coupon));
+
+        var response = new DeleteDiscountResponse { IsSuccess = true };
+        logger.LogInformation("Executed delete discount. Response {@Response}", response);
+        return response;
     }
 }
