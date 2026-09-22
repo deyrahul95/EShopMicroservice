@@ -2,6 +2,7 @@ using System.Text.Json;
 using Basket.Core.Domains;
 using Basket.Core.Repositories;
 using BuildingBlock.CQRS;
+using Discount.Grpc;
 using FluentValidation;
 
 namespace Basket.API.Basket.StoreBasket;
@@ -63,8 +64,10 @@ public class ShoppingCartItemValidator : AbstractValidator<ShoppingCartItem>
     }
 }
 
-public class StoreBasketCommandHandler(IBasketRepository repository, ILogger<StoreBasketCommandHandler> logger)
-    : ICommandHandler<StoreBasketCommand, StoreBasketResult>
+public class StoreBasketCommandHandler(
+    IBasketRepository repository,
+    DiscountProtoService.DiscountProtoServiceClient discountProtoService,
+    ILogger<StoreBasketCommandHandler> logger) : ICommandHandler<StoreBasketCommand, StoreBasketResult>
 {
     public async Task<StoreBasketResult> Handle(StoreBasketCommand command, CancellationToken ct)
     {
@@ -78,6 +81,9 @@ public class StoreBasketCommandHandler(IBasketRepository repository, ILogger<Sto
             LastModified = DateTime.UtcNow
         };
 
+        // Checking if any discount is applied for the items 
+        await DeductDiscount(cart: cart, ct: ct);
+
         cart = await repository.StoreBasket(cart, ct);
         logger.LogInformation(
             "Cart store successfully: {@Cart}",
@@ -89,5 +95,28 @@ public class StoreBasketCommandHandler(IBasketRepository repository, ILogger<Sto
             "Completed store basket command: {@Result}",
             result);
         return result;
+    }
+
+    private async Task DeductDiscount(ShoppingCart cart, CancellationToken ct)
+    {
+        foreach (var item in cart.Items)
+        {
+            logger.LogInformation("Checking discount for product {@ProductName}", item.ProductName);
+            var discountRequest = new GetDiscountRequest { ProductName = item.ProductName };
+
+            logger.LogInformation("Sending get discount request {@Request}", discountRequest);
+            var coupon = await discountProtoService.GetDiscountAsync(request: discountRequest, cancellationToken: ct);
+            logger.LogInformation("Received get discount response {@Response}", JsonSerializer.Serialize(coupon));
+
+            if (coupon.Id != 0 && coupon.Amount > 0)
+            {
+                logger.LogInformation(
+                    "Found discount for product {@ProductName} amount {@Amount}",
+                    coupon.ProductName,
+                    coupon.Amount);
+                item.Price -= coupon.Amount;
+                logger.LogInformation("Discount applied for product with id {@ProductId}", item.ProductId);
+            }
+        }
     }
 }
