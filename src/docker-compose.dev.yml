@@ -8,8 +8,8 @@ services:
       - POSTGRES_PASSWORD=example
       - POSTGRES_DB=BasketDB
     restart: always
-    ports:
-     - "5432:5432"
+    # ports:
+    #  - "5432:5432"
     volumes:
       - postgres_basket:/var/lib/postgresql
     networks:
@@ -19,25 +19,46 @@ services:
     image: redis
     container_name: distributedcached
     restart: always
-    ports:
-     - "6379:6379"
+    # ports:
+    #  - "6379:6379"
     networks:
       - EShop-Microservice
 
-  # discount.grpc:
-  #   image: discount-grpc
-  #   build:
-  #     context: .
-  #     dockerfile: ./Services/Discount/Discount.Grpc/Dockerfile
-  #   container_name: discount-grpc
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_HTTP_PORTS=8000
-  #     - ConnectionStrings__Database=Data Source=discount.db
-  #   ports:
-  #     - "6003:8000"
-  #   networks:
-  #     - EShop-Microservice
+  basket.api:
+    image: basket-api
+    build:
+      context: .
+      dockerfile: ./Services/Basket/Basket.API/Dockerfile
+    container_name: basket-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8000
+      - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDB;User Id=postgres;Password=example
+      - ConnectionStrings__Redis=distributedcached:6379
+      - GrpcSettings__DiscountUrl=http://discount.grpc:8000
+    depends_on:
+      - basketdb
+      - distributedcached
+      - discount.grpc
+    ports:
+      - "6002:8000"
+    networks:
+      - EShop-Microservice
+
+  discount.grpc:
+    image: discount-grpc
+    build:
+      context: .
+      dockerfile: ./Services/Discount/Discount.Grpc/Dockerfile
+    container_name: discount-grpc
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8000
+      - ConnectionStrings__Database=Data Source=discount.db
+    ports:
+      - "6003:8000"
+    networks:
+      - EShop-Microservice
 
 volumes:
   postgres_basket:

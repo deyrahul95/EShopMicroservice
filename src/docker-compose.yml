@@ -62,9 +62,11 @@ services:
       - ASPNETCORE_HTTP_PORTS=8000
       - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDB;User Id=postgres;Password=example
       - ConnectionStrings__Redis=distributedcached:6379
+      - GrpcSettings__DiscountUrl=http://discount.grpc:8000
     depends_on:
       - basketdb
       - distributedcached
+      - discount.grpc
     ports:
       - "6002:8000"
     networks:
