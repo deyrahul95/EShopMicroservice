@@ -15,5 +15,8 @@
   </Folder>
   <Folder Name="/Services/Ordering/">
     <Project Path="Services/Ordering/Ordering.API/Ordering.API.csproj" />
+    <Project Path="Services/Ordering/Ordering.Application/Ordering.Application.csproj" />
+    <Project Path="Services/Ordering/Ordering.Domain/Ordering.Domain.csproj" />
+    <Project Path="Services/Ordering/Ordering.Infrastructure/Ordering.Infrastructure.csproj" />
   </Folder>
 </Solution>
