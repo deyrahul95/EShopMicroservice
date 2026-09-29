@@ -17,7 +17,9 @@ public class Product : Entity<ProductId>
         {
             Id = id,
             Name = name,
-            Price = price
+            Price = price,
+            CreatedAt = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow
         };
     }
 }

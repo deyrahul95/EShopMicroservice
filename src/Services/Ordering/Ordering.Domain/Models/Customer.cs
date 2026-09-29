@@ -17,7 +17,9 @@ public class Customer : Entity<CustomerId>
         {
             Id = id,
             Name = name,
-            Email = email
+            Email = email,
+            CreatedAt = DateTime.UtcNow,
+            LastModified = DateTime.UtcNow,
         };
     }
 }

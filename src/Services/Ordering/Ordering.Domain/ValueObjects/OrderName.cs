@@ -2,7 +2,7 @@ namespace Ordering.Domain.ValueObjects;
 
 public record OrderName
 {
-    private const int DefaultLength = 5;
+    private const int MinLength = 5;
     private const int MaxLength = 100;
 
     public string Value { get; }
@@ -12,7 +12,7 @@ public record OrderName
     public static OrderName Of(string value)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(value);
-        ArgumentOutOfRangeException.ThrowIfNotEqual(value.Length, DefaultLength);
+        ArgumentOutOfRangeException.ThrowIfLessThan(value.Length, MinLength);
         ArgumentOutOfRangeException.ThrowIfGreaterThan(value.Length, MaxLength);
 
         return new OrderName(value);

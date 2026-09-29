@@ -1,12 +1,12 @@
 services:
   orderdb:
-    image: mcr.microsoft.com/mssql/server:2025-latest
+    image: mcr.microsoft.com/mssql/server
     container_name: orderdb
     environment:
       ACCEPT_EULA: "Y"
       MSSQL_PID: "Developer"
       MSSQL_SA_PASSWORD: "AdM!n78r9"
-    restart: unless-stopped
+    restart: "always"
     ports:
      - "1433:1433"
     volumes:

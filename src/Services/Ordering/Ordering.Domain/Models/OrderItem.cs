@@ -21,5 +21,7 @@ public class OrderItem : Entity<OrderItemId>
         ProductId = productId;
         Quantity = quantity;
         Price = price;
+        CreatedAt = DateTime.UtcNow;
+        LastModified = DateTime.UtcNow;
     }
 }
