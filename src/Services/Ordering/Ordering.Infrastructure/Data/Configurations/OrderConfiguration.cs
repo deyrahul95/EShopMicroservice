@@ -39,7 +39,8 @@ public class OrderConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(o => o.Status)
             .HasDefaultValue(OrderStatus.Draft);
 
-        builder.Property(o => o.TotalPrice);
+        builder.Property(o => o.TotalPrice)
+            .HasPrecision(18, 2);
     }
 
     private static void AddressConfiguration(ComplexPropertyBuilder<Address> addressBuilder)

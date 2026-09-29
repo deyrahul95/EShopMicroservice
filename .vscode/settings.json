@@ -5,6 +5,8 @@
         "catalogdb",
         "distributedcached",
         "Mediat",
+        "mssql",
+        "orderdb",
         "postgres",
         "postgresql",
         "rahul",
