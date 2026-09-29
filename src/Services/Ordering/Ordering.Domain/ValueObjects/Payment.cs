@@ -1,13 +1,19 @@
+using System.ComponentModel.DataAnnotations;
 using Ordering.Domain.Exceptions;
 
 namespace Ordering.Domain.ValueObjects;
 
 public record Payment
 {
+    [MaxLength(50)]
     public string CardName { get; } = string.Empty;
+    [MaxLength(24)]
     public string CardNumber { get; } = string.Empty;
+    [MaxLength(10)]
     public string Expiration { get; } = string.Empty;
+    [MaxLength(3)]
     public string CVV { get; } = string.Empty;
+    [Required]
     public string PaymentMethod { get; } = string.Empty;
 
     protected Payment() { }
