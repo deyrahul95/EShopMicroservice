@@ -2,6 +2,7 @@ using BuildingBlock.CQRS;
 using Microsoft.Extensions.Logging;
 using Ordering.Application.Data;
 using Ordering.Application.Dtos;
+using Ordering.Application.Extensions;
 using Ordering.Domain.Models;
 using Ordering.Domain.ValueObjects;
 
@@ -33,9 +34,9 @@ public class CreateOrderHandler(IAppDbContext dbContext, ILogger<CreateOrderHand
             id: OrderId.Of(Guid.NewGuid()),
             customerId: CustomerId.Of(orderDto.CustomerId),
             orderName: OrderName.Of(orderDto.OrderName),
-            shippingAddress: ToAddress(orderDto.ShippingAddress),
-            billingAddress: ToAddress(orderDto.BillingAddress),
-            payment: ToPayment(orderDto.Payment)
+            shippingAddress: OrderMapper.ToAddress(orderDto.ShippingAddress),
+            billingAddress: OrderMapper.ToAddress(orderDto.BillingAddress),
+            payment: OrderMapper.ToPayment(orderDto.Payment)
         );
 
         logger.LogInformation("Order {@OrderId} initialized from order dto.", newOrder.Id.Value);
@@ -52,22 +53,4 @@ public class CreateOrderHandler(IAppDbContext dbContext, ILogger<CreateOrderHand
 
         return newOrder;
     }
-
-    private static Address ToAddress(AddressDto addressDto) => Address.Of(
-        firstName: addressDto.FirstName,
-        lastName: addressDto.LastName,
-        emailAddress: addressDto.EmailAddress,
-        addressLine: addressDto.AddressLine,
-        country: addressDto.Country,
-        state: addressDto.State,
-        zipCode: addressDto.ZipCode
-    );
-
-    private static Payment ToPayment(PaymentDto paymentDto) => Payment.Of(
-        cardName: paymentDto.CardName,
-        cardNumber: paymentDto.CardNumber,
-        expiration: paymentDto.Expiration,
-        cvv: paymentDto.Cvv,
-        paymentMethod: paymentDto.PaymentMethod
-    );
 }
