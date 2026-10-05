@@ -4,6 +4,7 @@
         "basketdb",
         "catalogdb",
         "distributedcached",
+        "Dtos",
         "Mediat",
         "mssql",
         "orderdb",
