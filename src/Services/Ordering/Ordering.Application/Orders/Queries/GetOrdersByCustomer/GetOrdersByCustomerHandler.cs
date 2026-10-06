@@ -30,7 +30,7 @@ public class GetOrdersByCustomerHandler(
             .Include(o => o.OrderItems)
             .AsNoTracking()
             .Where(o => o.CustomerId.Equals(customerId))
-            .OrderBy(o => o.CustomerId)
+            .OrderBy(o => o.OrderName)
             .ToListAsync(ct);
         logger.LogInformation(
             "Found {@Count} orders with customer id: {@CustomerId}",
@@ -39,7 +39,7 @@ public class GetOrdersByCustomerHandler(
 
         var result = new GetOrdersByCustomerResult(orders.ToDtoList());
         logger.LogInformation(
-            "Executed get orders by customer query. Result: {@Result}",
+            "Executed get orders by customer query with result: {@Result}",
             JsonSerializer.Serialize(result));
 
         return result;
