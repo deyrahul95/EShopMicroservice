@@ -45,9 +45,9 @@ public class UpdateOrderHandler(IAppDbContext dbContext, ILogger<UpdateOrderHand
         logger.LogInformation("Updating order {@OrderId} properties", existingOrder.Id.Value);
         existingOrder.Update(
             orderName: OrderName.Of(orderDto.OrderName),
-            shippingAddress: OrderMapper.ToAddress(orderDto.ShippingAddress),
-            billingAddress: OrderMapper.ToAddress(orderDto.BillingAddress),
-            payment: OrderMapper.ToPayment(orderDto.Payment),
+            shippingAddress: orderDto.ShippingAddress.ToAddress(),
+            billingAddress: orderDto.BillingAddress.ToAddress(),
+            payment: orderDto.Payment.ToPayment(),
             orderStatus: orderDto.OrderStatus
         );
 

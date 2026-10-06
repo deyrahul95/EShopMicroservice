@@ -34,9 +34,9 @@ public class CreateOrderHandler(IAppDbContext dbContext, ILogger<CreateOrderHand
             id: OrderId.Of(Guid.NewGuid()),
             customerId: CustomerId.Of(orderDto.CustomerId),
             orderName: OrderName.Of(orderDto.OrderName),
-            shippingAddress: OrderMapper.ToAddress(orderDto.ShippingAddress),
-            billingAddress: OrderMapper.ToAddress(orderDto.BillingAddress),
-            payment: OrderMapper.ToPayment(orderDto.Payment)
+            shippingAddress: orderDto.ShippingAddress.ToAddress(),
+            billingAddress: orderDto.BillingAddress.ToAddress(),
+            payment: orderDto.Payment.ToPayment()
         );
 
         logger.LogInformation("Order {@OrderId} initialized from order dto.", newOrder.Id.Value);
