@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Ordering.Application.Data;
 using Ordering.Application.Extensions;
 
-namespace Ordering.Application.Orders.Queries;
+namespace Ordering.Application.Orders.Queries.GetOrderByName;
 
 public class GetOrdersByNameHandler(IAppDbContext dbContext, ILogger<GetOrdersByNameHandler> logger)
     : IQueryHandler<GetOrdersByNameQuery, GetOrderByNameResult>
