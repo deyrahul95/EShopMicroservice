@@ -12,7 +12,7 @@ namespace Ordering.Application.Orders.Commands.UpdateOrder;
 public class UpdateOrderHandler(IAppDbContext dbContext, ILogger<UpdateOrderHandler> logger)
     : ICommandHandler<UpdateOrderCommand, UpdateOrderResult>
 {
-    public async Task<UpdateOrderResult> Handle(UpdateOrderCommand command, CancellationToken ct)
+    public async Task<UpdateOrderResult> Handle(UpdateOrderCommand command, CancellationToken ct = default)
     {
         logger.LogInformation("Executing update order command: {@Command}", command);
 
