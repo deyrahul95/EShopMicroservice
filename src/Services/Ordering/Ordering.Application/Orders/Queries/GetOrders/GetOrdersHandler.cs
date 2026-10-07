@@ -36,8 +36,8 @@ public class GetOrdersHandler(
         var orders = await dbContext.Orders
             .Include(o => o.OrderItems)
             .AsNoTracking()
-            .OrderBy(o => o.OrderName)
-            .Skip(pageNumber * pageSize)
+            .OrderBy(o => o.OrderName.Value)
+            .Skip(pageSize * (pageNumber - 1))
             .Take(pageSize)
             .ToListAsync(ct);
         logger.LogInformation(

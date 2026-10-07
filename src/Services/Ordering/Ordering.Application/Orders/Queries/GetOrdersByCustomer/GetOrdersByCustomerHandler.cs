@@ -29,8 +29,8 @@ public class GetOrdersByCustomerHandler(
         var orders = await dbContext.Orders
             .Include(o => o.OrderItems)
             .AsNoTracking()
-            .Where(o => o.CustomerId.Equals(customerId))
-            .OrderBy(o => o.OrderName)
+            .Where(o => o.CustomerId == customerId)
+            .OrderBy(o => o.OrderName.Value)
             .ToListAsync(ct);
         logger.LogInformation(
             "Found {@Count} orders with customer id: {@CustomerId}",
