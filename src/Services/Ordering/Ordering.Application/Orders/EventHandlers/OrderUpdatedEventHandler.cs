@@ -1,3 +1,4 @@
+using System.Text.Json;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Ordering.Domain.Events;
@@ -9,11 +10,15 @@ public class OrderUpdatedEventHandler(ILogger<OrderUpdatedEventHandler> logger)
 {
     public Task Handle(OrderUpdatedEvent notification, CancellationToken ct = default)
     {
-        logger.LogInformation("Handling order update domain event: {@Event}", notification);
+        logger.LogInformation(
+            "Handling order update domain event: {@Event}",
+            JsonSerializer.Serialize(notification));
 
         // Apply any business logic needed for this event handler
 
-        logger.LogInformation("Domain Event Handled: {@DomainEvent}", notification.GetType().Name);
+        logger.LogInformation(
+            "Domain Event Handled: {@DomainEvent}",
+            notification.GetType().Name);
         return Task.CompletedTask;
     }
 }

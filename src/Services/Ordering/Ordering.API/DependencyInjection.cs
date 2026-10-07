@@ -1,3 +1,4 @@
+using BuildingBlock.Exceptions.Handler;
 using Carter;
 using Scalar.AspNetCore;
 
@@ -9,8 +10,9 @@ public static class DependencyInjection
     {
         // Add api service dependencies
         services.AddOpenApi();
-
         services.AddCarter();
+
+        services.AddExceptionHandler<CustomExceptionHandler>();
 
         return services;
     }
@@ -25,6 +27,8 @@ public static class DependencyInjection
         }
 
         app.MapCarter();
+
+        app.UseExceptionHandler(option => { });
 
         return app;
     }
