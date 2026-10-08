@@ -7,33 +7,29 @@ services:
       MSSQL_PID: "Developer"
       MSSQL_SA_PASSWORD: "AdM!n78r9"
     restart: "always"
-    ports:
-     - "1433:1433"
+    # ports:
+    #  - "1433:1433"
     volumes:
       - sqlserver_order:/var/opt/mssql
     networks:
       - EShop-Microservice
 
-  # basket.api:
-  #   image: basket-api
-  #   build:
-  #     context: .
-  #     dockerfile: ./Services/Basket/Basket.API/Dockerfile
-  #   container_name: basket-api
-  #   environment:
-  #     - ASPNETCORE_ENVIRONMENT=Development
-  #     - ASPNETCORE_HTTP_PORTS=8000
-  #     - ConnectionStrings__Database=Server=basketdb;Port=5432;Database=BasketDB;User Id=postgres;Password=example
-  #     - ConnectionStrings__Redis=distributedcached:6379
-  #     - GrpcSettings__DiscountUrl=http://discount.grpc:8000
-  #   depends_on:
-  #     - basketdb
-  #     - distributedcached
-  #     - discount.grpc
-  #   ports:
-  #     - "6002:8000"
-  #   networks:
-  #     - EShop-Microservice
+  order.api:
+    image: order-api
+    build:
+      context: .
+      dockerfile: ./Services/Ordering/Ordering.API/Dockerfile
+    container_name: order-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_HTTP_PORTS=8000
+      - ConnectionStrings__Database=Server=orderdb;Database=OrderDb;User Id=sa;Password=AdM!n78r9;Encrypt=False;TrustServerCertificate=True
+    depends_on:
+      - orderdb
+    ports:
+      - "6004:8000"
+    networks:
+      - EShop-Microservice
 
 volumes:
   sqlserver_order:
